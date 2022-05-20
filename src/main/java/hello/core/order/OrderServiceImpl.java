@@ -3,10 +3,10 @@ package hello.core.order;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+//@RequiredArgsConstructor    // 필수값인 final이 붙은걸 가지고 생성자를 만들어준다.
 public class OrderServiceImpl implements OrderService {
 
     // MemberRepository여기에서 일단 회원을 찾아야하니까 이게 필요하고
@@ -19,8 +19,8 @@ public class OrderServiceImpl implements OrderService {
     // private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
 
     // 그래서 이렇게만 하면 interface에만 의존하게 된다.
-    private MemberRepository memberRepository;    // final로 되어있으면 기본으로 할당이 되어야 한다. 생성자로
-    private DiscountPolicy discountPolicy;
+    private final MemberRepository memberRepository;    // final로 되어있으면 기본으로 할당이 되어야 한다. 생성자로!
+    private final DiscountPolicy discountPolicy;        // 생성자 주입을 쓰면 final 키워드를 넣을 수 있다.
 
     /*public void setMemberRepository(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -30,14 +30,8 @@ public class OrderServiceImpl implements OrderService {
         this.discountPolicy = discountPolicy;
     }*/
 
-    @Autowired
+    //@Autowired  // 생성자가 딱 하나 있으면 @Autowired는 생략할 수 있다.
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
-
-    @Autowired
-    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
